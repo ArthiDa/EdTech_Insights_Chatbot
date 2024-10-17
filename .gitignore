@@ -3,4 +3,5 @@ __pycache__/
 *.pyc
 .env
 testing
-OrgX_Embeddings/
+OrgX_Embeddings/index.faiss
+OrgX_Embeddings/index.pkl

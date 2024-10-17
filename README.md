@@ -32,3 +32,7 @@ streamlit run Home.py
 ```
 
 Navigate to the Chat Interface page to start interacting with the chatbot.
+
+## Get the embeddings
+
+- Navigate to OrgX_Embeddings directory and follow the embedding.txt file to get the embeddings
