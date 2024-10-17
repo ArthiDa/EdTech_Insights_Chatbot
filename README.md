@@ -26,18 +26,3 @@ streamlit run Home.py
 ```
 
 Navigate to the Chat Interface page to start interacting with the chatbot.
-
-## TODO
-
-- Implement the actual chatbot logic in the `get_chatbot_response` function
-- Add data processing and analysis capabilities
-- Integrate with the provided CSV files
-- Implement visualization features for data insights
-
-## Contributing
-
-[Add contributing guidelines here]
-
-## License
-
-[Add license information here]
