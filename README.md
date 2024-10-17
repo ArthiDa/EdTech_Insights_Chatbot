@@ -11,8 +11,14 @@ This project is an AI-powered chatbot interface designed to help district admins
 
 ## Installation
 
-1. Clone this repository
-2. Install the required packages:
+1. Clone this repository and navigate to the project directory
+2. Create a virtual python environment
+   - For Windows `python -m venv venv`
+   - For Linux/MAC `python3 -m venv venv`
+3. Activate the virtual environment
+   - For Window `./venv/Source/activate`
+   - For Linux/MAC `source venv/bin/activate`
+4. Install the required packages:
    ```
    pip install -r requirements.txt
    ```
