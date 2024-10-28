@@ -23,7 +23,7 @@ This project is an AI-powered chatbot interface designed to help district admins
    pip install -r requirements.txt
    ```
 
-# For Langfuse configuration
+## [Langfuse configuration](https://github.com/ArthiDa/EdTech_Insights_Chatbot/blob/main/LANGFUSE_README.md)
 
 ## Usage
 
