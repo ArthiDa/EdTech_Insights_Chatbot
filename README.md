@@ -37,4 +37,5 @@ Navigate to the Chat Interface page to start interacting with the chatbot.
 
 ## Get the embeddings
 
-- Navigate to OrgX_Embeddings directory and follow the embedding.txt file to get the embeddings
+- Go to [here](https://drive.google.com/file/d/10Hu07HXBHgrAeZd9i-MwvGncd_apMFbm/view?usp=sharing) and download the zip.
+- Extract the zip and put index.faiss and index.pkl file to OrgX_Embeddings directory.
