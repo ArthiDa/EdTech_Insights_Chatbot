@@ -23,6 +23,8 @@ This project is an AI-powered chatbot interface designed to help district admins
    pip install -r requirements.txt
    ```
 
+# For Langfuse configuration
+
 ## Usage
 
 Run the Streamlit app:

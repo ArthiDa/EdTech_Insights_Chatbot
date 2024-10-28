@@ -10,11 +10,41 @@ from langchain.prompts.chat import (
     ChatPromptTemplate,
 )
 from langchain_openai import OpenAIEmbeddings
+from langfuse import Langfuse
+from langfuse.callback import CallbackHandler
+import uuid
 
 
 class Chatbot:
     def __init__(self, save_dir):
         load_dotenv()
+        # first generate a session_id
+        self.session_id = str(uuid.uuid4())
+
+        # Initialize the Langfuse client
+        self.langfuse = Langfuse()
+
+        self.langfuse_prompt = self.langfuse.get_prompt("chatbot-prompt")
+        self.version = self.langfuse_prompt.version
+        self.model = self.langfuse_prompt.config["model"]
+        self.temperature = self.langfuse_prompt.config["temperature"]
+        self.tags = [
+            "chatbot-prompt",
+            "chatbot-prompt-" + f"v{str(self.version)}",
+            self.model,
+        ]
+
+        self.langfuse_handler = CallbackHandler(
+            secret_key=os.getenv("LANGFUSE_SECRET_KEY"),
+            public_key=os.getenv("LANGFUSE_PUBLIC_KEY"),
+            host=os.getenv("LANGFUSE_HOST"),
+            session_id=self.session_id,
+            tags=self.tags,
+        )
+        self.system_template = SystemMessagePromptTemplate.from_template(
+            self.langfuse_prompt.get_langchain_prompt(),
+            metadata={"langfuse_prompt": self.langfuse_prompt},
+        )
 
         # Ensure you have set the OpenAI API key in your environment variables
         os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
@@ -33,19 +63,16 @@ class Chatbot:
 
     def create_conversational_chain(self):
         # Initialize the language model
-        llm = ChatOpenAI(temperature=0, model_name="gpt-4o-mini")
+        llm = ChatOpenAI(temperature=self.temperature, model_name=self.model)
 
-        # Create a custom prompt template
-        system_template = """You are an intelligent assistant specialized in analyzing and generating insights from CSV files containing organizational data. Your goal is to answer questions, provide detailed insights, and generate relevant analyses based on the information within the CSV files. You can compute statistics, identify trends, and offer recommendations if the data allows it. If the data doesn't contain enough information to answer a query, respond with: 'I'm sorry, but the data does not provide enough information to answer that question.'
-        
-        {context}
-        """
         human_template = "{question}"
 
         messages = [
-            SystemMessagePromptTemplate.from_template(system_template),
+            self.system_template,
             HumanMessagePromptTemplate.from_template(human_template),
         ]
+
+        # print(messages)
         prompt = ChatPromptTemplate.from_messages(messages)
 
         # Initialize the memory
@@ -63,5 +90,10 @@ class Chatbot:
         )
 
     def chat(self, query):
-        result = self.conversation_chain.invoke({"question": query})
+        result = self.conversation_chain.invoke(
+            {"question": query},
+            config={
+                "callbacks": [self.langfuse_handler],
+            },
+        )
         return result["answer"], result["source_documents"]
